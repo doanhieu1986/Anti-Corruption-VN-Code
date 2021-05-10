@@ -1,16 +1,17 @@
 from vncorenlp import VnCoreNLP
-import pandas as pd 
+import pandas as pd
+import os
 
 
-!mkdir -p vncorenlp/models/wordsegmenter
-!wget https://raw.githubusercontent.com/vncorenlp/VnCoreNLP/master/VnCoreNLP-1.1.1.jar
-!get https://raw.githubusercontent.com/vncorenlp/VnCoreNLP/master/models/wordsegmenter/vi-vocab
-!wget https://raw.githubusercontent.com/vncorenlp/VnCoreNLP/master/models/wordsegmenter/wordsegmenter.rdr
-!mv VnCoreNLP-1.1.1.jar vncorenlp/ 
-!mv vi-vocab vncorenlp/models/wordsegmenter/
-!mv wordsegmenter.rdr vncorenlp/models/wordsegmenter/
+def tokenize(text):
+    rdrsegmenter = VnCoreNLP('D:/VNU/Thesis/Thesis - Python/vncorenlp/VnCoreNLP-1.1.1.jar', annotators="wseg", max_heap_size='-Xmx500m')
+    word_segmented_text = rdrsegmenter.tokenize(text)
+    return word_segmented_text
+
+
+text = '\nThu sang Tôn Ngộ Không phò Đường Tăng đi thỉnh kinh tại Tây Trúc..,., Tội danh tham nhũng được Viện kiểm sát khẳng định.'
+
+print(tokenize(text))
+
 # test = pd.read_csv('D:/VNU/Thesis/Thesis - Python/vnexpress_all_processing.csv')
 # text = test['Title_content'][0]
-# rdrsegmenter = VnCoreNLP("/Absolute-path-to/vncorenlp/VnCoreNLP-1.1.1.jar", annotators="wseg", max_heap_size='-Xmx500m')
-# word_segmented_text = rdrsegmenter.tokenize(text) 
-# print(word_segmented_text)
