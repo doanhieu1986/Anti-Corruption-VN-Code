@@ -101,3 +101,7 @@ def convert_date(date):
     month = int(date[1])
     day = int(date[0])
     return datetime(year, month, day), pd.Timestamp(datetime(year, month, day)).quarter, year, month
+
+def wordListToFreqDict(wordlist):
+    wordfreq = [wordlist.count(p) for p in wordlist]
+    return dict(zip(wordlist,wordfreq))
