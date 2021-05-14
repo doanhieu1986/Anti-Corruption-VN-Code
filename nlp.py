@@ -8,6 +8,11 @@ def tokenize(text):
     return word_segmented_text
 
 
+def wordListToFreqDict(wordlist):
+    wordfreq = [wordlist.count(p) for p in wordlist]
+    return dict(zip(wordlist,wordfreq))
+
+
 text = '\nThu sang Tôn Ngộ Không phò Đường Tăng đi thỉnh kinh tại Tây Trúc..,., Tội danh tham nhũng được Viện kiểm sát khẳng định.'
 
 print(tokenize(text))
