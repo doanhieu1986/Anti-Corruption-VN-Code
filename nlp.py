@@ -8,14 +8,26 @@ def tokenize(text):
     return word_segmented_text
 
 
-def wordListToFreqDict(wordlist):
-    wordfreq = [wordlist.count(p) for p in wordlist]
-    return dict(zip(wordlist,wordfreq))
+def remove_character (text):
+    '''
+    text: text need to remove characters
+    characters: list of removed characters 
+        '''
+    remove_list_character = ['!','@','#','$','%','^','&','*','(',')','<','>','?',':','"','[',']','{','}','=','...','…','\xa0']
+    for i in remove_list_character:
+        text = text.replace(i,'')
+    return text
 
 
-text = '\nThu sang Tôn Ngộ Không phò Đường Tăng đi thỉnh kinh tại Tây Trúc..,., Tội danh tham nhũng được Viện kiểm sát khẳng định.'
+def word_freq(sentence):
+    word_freq = [sentence.count(p) for p in sentence]
+    return dict(zip(sentence,word_freq))
 
-print(tokenize(text))
 
-# test = pd.read_csv('D:/VNU/Thesis/Thesis - Python/vnexpress_all_processing.csv')
-# text = test['Title_content'][0]
+def dict_of_words(text):
+    text_tokenize = nlp.tokenize(text)
+    dict_all = {}
+    for i in text_tokenize:
+        word_freq = nlp.word_freq(i)
+        dict_all = Counter(dict_all) + Counter(word_freq)
+    return dict_all
