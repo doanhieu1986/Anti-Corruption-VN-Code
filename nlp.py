@@ -1,5 +1,6 @@
 from vncorenlp import VnCoreNLP
 import pandas as pd
+from collections import Counter
 
 
 def tokenize(text):
@@ -25,9 +26,9 @@ def word_freq(sentence):
 
 
 def dict_of_words(text):
-    text_tokenize = nlp.tokenize(text)
+    text_tokenize = tokenize(text)
     dict_all = {}
     for i in text_tokenize:
-        word_freq = nlp.word_freq(i)
+        word_freq = word_freq(i)
         dict_all = Counter(dict_all) + Counter(word_freq)
     return dict_all
