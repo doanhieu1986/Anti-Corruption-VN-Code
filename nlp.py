@@ -29,6 +29,6 @@ def dict_of_words(text):
     text_tokenize = tokenize(text)
     dict_all = {}
     for i in text_tokenize:
-        word_freq = word_freq(i)
-        dict_all = Counter(dict_all) + Counter(word_freq)
+        freq = word_freq(i)
+        dict_all = Counter(dict_all) + Counter(freq)
     return dict_all
