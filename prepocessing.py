@@ -22,7 +22,9 @@ import nlp
 
 
 # Check null value
-df = pd.read_csv('D:/VNU/Thesis/Thesis - Python/vnexpress_all_processing.csv')[:1000]
+k=500
+n=600
+df = pd.read_csv('D:/VNU/Thesis/Thesis - Python/vnexpress_all_processing.csv')[k:n]
 # print(df)
 
 
@@ -31,7 +33,7 @@ df = pd.read_csv('D:/VNU/Thesis/Thesis - Python/vnexpress_all_processing.csv')[:
 # df['Quarter']= ''
 # df['Year']= ''
 df['Dict'] = ''
-for i in range(len(df)):
+for i in range(k,n):
     # df['Month'][i] = utils.convert_date(df['Title_time'][i])[3]
     # df['Quarter'][i] = utils.convert_date(df['Title_time'][i])[1]
     # df['Year'][i] = utils.convert_date(df['Title_time'][i])[2]
@@ -39,5 +41,6 @@ for i in range(len(df)):
     text = nlp.remove_character(text)
     df['Dict'][i] =nlp.dict_of_words(text)
     # print(nlp.dict_of_words(text))
-df.to_csv('D:/VNU/Thesis/Thesis - Python/vnexpress_all_processing_1.csv',index=False, encoding='utf-8-sig')
+    # print(text)
+df.to_csv('D:/VNU/Thesis/Thesis - Python/vnexpress_all_processing_{x}.csv'.format(x=k),index=False, encoding='utf-8-sig')
 # print(df)
