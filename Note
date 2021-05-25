@@ -1,0 +1,3 @@
+Preprocessing: use nltk or gensim
+Use pandas.apply()/ .map/ .applymap or np.vectorize() instead of loop iteration
+read chunk pandas
