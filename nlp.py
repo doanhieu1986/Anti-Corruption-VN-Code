@@ -26,6 +26,7 @@ def word_freq(sentence):
 
 
 def dict_of_words(text):
+    text = remove_character(text)
     text_tokenize = tokenize(text)
     dict_all = {}
     for i in text_tokenize:
