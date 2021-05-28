@@ -32,3 +32,12 @@ def dict_of_words(text):
         freq = word_freq(i)
         dict_all = Counter(dict_all) + Counter(freq)
     return dict_all
+
+
+def check_subset(dict_of_word, list_of_word):
+    '''
+    dict_of_word: the dict of word
+    subset: the sub-list of word need to be checked if it is subset of set or not
+    '''
+    dict_of_word = dict_of_word.keys()
+    return(set(list_of_word).issubset(dict_of_word))
