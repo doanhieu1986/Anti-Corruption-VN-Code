@@ -32,13 +32,27 @@ def dict_of_words(text):
     for i in text_tokenize:
         freq = word_freq(i)
         dict_all = Counter(dict_all) + Counter(freq)
+        dict_all = uppercase_for_dict_keys(dict_all)
     return dict(dict_all)
 
 
 def check_subset(dict_of_word, list_of_word):
     '''
     dict_of_word: the dict of word
-    subset: the sub-list of word need to be checked if it is subset of set or not
+    list_of_word: the list of the sub-list of word need to be checked if it is subset of set or not
     '''
     dict_of_word = dict_of_word.keys()
-    return(set(list_of_word).issubset(dict_of_word))
+    count = 0
+    for i in list_of_word:
+        if set(i).issubset(dict_of_word)==True:
+            count +=1
+    return count
+
+
+def uppercase_for_dict_keys(lower_dict):
+    upper_dict = {}
+    for k, v in lower_dict.items():
+        if isinstance(v, dict):
+            v = _uppercase_for_dict_keys(v)
+        upper_dict[k.upper()] = v
+    return upper_dict
