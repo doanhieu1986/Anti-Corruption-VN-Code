@@ -3,8 +3,9 @@ import pandas as pd
 from collections import Counter
 
 
+rdrsegmenter = VnCoreNLP('/Users/hieudt/VNU/Thesis/Thesis-Data_Science-main/vncorenlp/VnCoreNLP-1.1.1.jar', annotators="wseg", max_heap_size='-Xmx500m')
+
 def tokenize(text):
-    rdrsegmenter = VnCoreNLP('D:/VNU/Thesis/Thesis - Python/vncorenlp/VnCoreNLP-1.1.1.jar', annotators="wseg", max_heap_size='-Xmx500m')
     word_segmented_text = rdrsegmenter.tokenize(text)
     return word_segmented_text
 
@@ -14,10 +15,19 @@ def remove_character (text):
     text: text need to remove characters
     characters: list of removed characters 
         '''
-    remove_list_character = ['!','@','#','$','%','^','&','*','(',')','<','>','?',':','"','[',']','{','}','=','...','…','\xa0']
+    remove_list_character = ['!','@','#','$','%','^','&','*','(',')','<','>','?',':','"','[',']','{','}','=','...','…','\xa0',',','\n']
     for i in remove_list_character:
         text = text.replace(i,'')
     return text
+
+
+def uppercase_for_dict_keys(lower_dict):
+    upper_dict = {}
+    for k, v in lower_dict.items():
+        if isinstance(v, dict):
+            v = _uppercase_for_dict_keys(v)
+        upper_dict[k.upper()] = v
+    return upper_dict
 
 
 def word_freq(sentence):
@@ -47,12 +57,3 @@ def check_subset(dict_of_word, list_of_word):
         if set(i).issubset(dict_of_word)==True:
             count +=1
     return count
-
-
-def uppercase_for_dict_keys(lower_dict):
-    upper_dict = {}
-    for k, v in lower_dict.items():
-        if isinstance(v, dict):
-            v = _uppercase_for_dict_keys(v)
-        upper_dict[k.upper()] = v
-    return upper_dict
