@@ -101,3 +101,34 @@ def convert_date(date):
     month = int(date[1])
     day = int(date[0])
     return datetime(year, month, day), pd.Timestamp(datetime(year, month, day)).quarter, year, month
+
+
+def is_subset(group_words, text):
+    '''Check whether a word combination is in a text or not
+        group_words: list of words group need to check
+        text: content of a paper'''
+    status = None
+    for i in group_words:
+        if i.upper() in text.upper():
+            status = True
+        else:
+            status = False
+            break
+    return status
+
+
+def base_index(list_of_group_words, text):
+    count = 0
+    for i in list_of_group_words:
+        if is_subset(i,text):
+            count +=1
+    return count
+
+
+def word_combination(excel_file_link):
+    word_combination = pd.read_excel(excel_file_link)
+    word_combination['list'] = word_combination.apply(lambda row: row['group_words'].split(','), axis=1)
+    list_of_group_words = []
+    for i in word_combination['list']:
+        list_of_group_words.append(i)
+    return list_of_group_words
