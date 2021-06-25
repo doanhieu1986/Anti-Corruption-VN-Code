@@ -71,7 +71,7 @@ def get_data_from_page(page_link):
         tilte_time.append(read_content('https://nhandan.vn' + i.a['href'])[1])
         location.append(read_content('https://nhandan.vn' + i.a['href'])[2])
 
-    dantri = {
+    nhandan = {
         "Paper": paper,
         "Title_name": title_name,
         "Title_link": title_link,
@@ -79,7 +79,7 @@ def get_data_from_page(page_link):
         "Title_time": tilte_time,
         "Location": location
     }
-    return pd.DataFrame(dantri)
+    return pd.DataFrame(nhandan)
 
 
 def convert_date(date):
@@ -102,8 +102,8 @@ def base_index(list_of_group_words, text):
 
 
 def nhandan_collection():
-    start_date = date(2006, 5, 31)
-    end_date = date(2019, 12, 31)
+    start_date = date(2014, 11, 12)
+    end_date = date(2014, 12, 31)
     delta = end_date - start_date
     for i in range(delta.days + 1):
         day = start_date + timedelta(days=i)
@@ -111,7 +111,7 @@ def nhandan_collection():
         day = datetime.strptime(str(day), "%Y-%m-%d").strftime("%d/%m/%Y")
         page_link = 'https://nhandan.vn/article/Paging?categoryId=1287&pageIndex=1&pageSize=15&fromDate={k}&toDate={l}&displayView=PagingPartial'.format(k=day, l=day)
         df = get_data_from_page(page_link)
-        df.to_csv('C:/Users/admin/Downloads/nhandan/nhandan_{page_date}.csv'.format(page_date=page_date), encoding='utf-8-sig')
+        df.to_csv('/Users/hieudt/VNU/Thesis/Nhandan/nhandan_{page_date}.csv'.format(page_date=page_date), encoding='utf-8-sig')
         print(page_date)
 
 
@@ -123,30 +123,40 @@ def location_process(text):
 
 def time_process(text):
     if text != 'Not defined':
-        text = text.split(',')[1].split('-')[0]
+        text = text.split(',')[1]
+        text = text.replace('-', '/')
         text = utils.convert_date(text)
     return text
 
 
-def dantri_all_processing():
-    dantri = pd.read_csv('/Users/hieudt/VNU/Thesis/Dantri/dantri_collection.csv')
-    dantri['Location'] = dantri.apply(lambda row: location_process(row['Location']), axis=1)
-    dantri['Month'] = dantri.apply(lambda row: time_process(row['Title_time'])[3], axis=1)
-    dantri['Quarter'] = dantri.apply(lambda row: time_process(row['Title_time'])[1], axis=1)
-    dantri['Year'] = dantri.apply(lambda row: time_process(row['Title_time'])[2], axis=1)
-    dantri = dantri.drop(dantri[dantri['Year'] == 2021].index, axis=0)
-    dantri.to_csv('/Users/hieudt/VNU/Thesis/Thesis-Data_Science-main/dantri_all_processing.csv', index=False,
-                  encoding='utf-8-sig')
+def nhandan_all_processing():
+    nhandan = pd.read_csv('/Users/hieudt/VNU/Thesis/Nhandan/nhandan_collection.csv')
+    nhandan = nhandan.dropna()
+    nhandan = nhandan[nhandan['Title_content'] != ' Không tìm thấy nội dung       ']
+    nhandan = nhandan[nhandan['Title_content'] != '       ']
+    nhandan = nhandan[nhandan['Title_content'] != 'HTTP Error 400. The request URL is invalid.']
+    nhandan['Title_time'][3361] = 'Thứ Bảy, 29-12-2018, 20:56'
+    nhandan['Location'] = nhandan.apply(lambda row: location_process(row['Location']), axis=1)
+    nhandan['Month'] = nhandan.apply(lambda row: time_process(row['Title_time'])[3], axis=1)
+    nhandan['Quarter'] = nhandan.apply(lambda row: time_process(row['Title_time'])[1], axis=1)
+    nhandan['Year'] = nhandan.apply(lambda row: time_process(row['Title_time'])[2], axis=1)
+    nhandan.to_csv('/Users/hieudt/VNU/Thesis/Thesis-Data_Science-main/nhandan_all_processing.csv', index=False, encoding='utf-8-sig')
 
 
-def dantri_result():
+def nhandan_result():
     list_of_group_words = utils.word_combination('word_combination.xlsx')
-    data = pd.read_csv('dantri_all_processing.csv')
-    data['based_index'] = data.apply(lambda row: utils.base_index(list_of_group_words, row['Title_content']), axis=1)
+    data = pd.read_csv('nhandan_all_processing.csv')
+    data['based_index'] = data.apply(lambda row: utils.base_index(list_of_group_words, row['Title_content'])[0], axis=1)
+    data['List_out'] = data.apply(lambda row: utils.base_index(list_of_group_words, row['Title_content'])[1], axis=1)
     data = data[data['based_index'] > 0]
-    data.to_excel('dantri_result.xlsx', index=False, encoding='utf-8-sig')
+    data.to_excel('nhandan_result.xlsx', index=False, encoding='utf-8-sig')
 
-# link = 'https://nhandan.vn/article/Paging?categoryId=1287&pageIndex=1&pageSize=15&fromDate=07/06/2020&toDate=08/06/2020&displayView=PagingPartial'
-# link1 = 'https://nhandan.vn' + get_data_from_page(link)['Title_link'][1]
-# print(get_data_from_page(link)['Title_time'])
-nhandan_collection()
+
+# nhandan_all_processing()
+# nhandan_result()
+# list_of_group_words = utils.word_combination('word_combination.xlsx')
+# nhandan = pd.read_csv('nhandan_all_processing.csv')['Title_content']
+
+# https://nhandan.vn/thoi-su-phap-luat/infographic-nhin-lai-nhung-vu-dai-an-trong-nam-2018-345333/  => trang tong hop vu an ==> nhandan['Title_time'][3361] = 'Thứ Bảy, 29-12-2018, 20:56'
+
+
