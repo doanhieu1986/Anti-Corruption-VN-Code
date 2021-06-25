@@ -75,11 +75,11 @@ def get_data_from_page(page_link):
 
 
 def vnexpress_processing(df):
-    '''
+    """
        1. Split Tiltle_time to get Date of paper -- dd/mm/yyyy
        2. Remove all video new -- no content
        3. Remove all foreign news
-       '''
+    """
     for i in range(len(df)):
         if len(df['Title_time'][i].split(','))>1:
             df['Title_time'][i] = df['Title_time'][i].split(',')[1]
@@ -93,9 +93,9 @@ def vnexpress_processing(df):
 
 
 def convert_date(date):
-    '''
+    """
         convert string to date: dd/mm/yyyy
-    '''
+    """
     date = date.split('/')
     year = int(date[2])
     month = int(date[1])
@@ -104,9 +104,11 @@ def convert_date(date):
 
 
 def is_subset(group_words, text):
-    '''Check whether a word combination is in a text or not
+    """
+        Check whether a word combination is in a text or not
         group_words: list of words group need to check
-        text: content of a paper'''
+        text: content of a paper
+    """
     status = None
     for i in group_words:
         if i.upper() in text.upper():
@@ -119,10 +121,12 @@ def is_subset(group_words, text):
 
 def base_index(list_of_group_words, text):
     count = 0
+    list_out = []
     for i in list_of_group_words:
         if is_subset(i,text):
+            list_out.append(i)
             count +=1
-    return count
+    return count,list_out
 
 
 def word_combination(excel_file_link):
